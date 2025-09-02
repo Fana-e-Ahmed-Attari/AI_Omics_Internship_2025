@@ -1,8 +1,5 @@
-
-# Use forward slashes (/) or double backslashes (\\) on Windows.
 setwd("D:/R_Projects/AI_Omics_Internship_2025/Module_2")
 cat("Working directory set to:\n", getwd(), "\n\n")
-
 
 results_dir <- "Results"
 if (!dir.exists(results_dir)) {
@@ -12,7 +9,7 @@ if (!dir.exists(results_dir)) {
   cat("Results folder already exists:", results_dir, "\n\n")
 }
 
-# Helper: detect actual column name (case-insensitive)
+# detect actual column name 
 detect_col <- function(df, candidates) {
   # returns the actual column name present in df (matching candidate case-insensitively)
   for (cand in candidates) {
@@ -22,7 +19,6 @@ detect_col <- function(df, candidates) {
   return(NULL)
 }
 
-#The required classify_gene function
 # Input: single values logFC and padj
 classify_gene <- function(logFC, padj) {
   logFC <- as.numeric(logFC)
@@ -32,7 +28,6 @@ classify_gene <- function(logFC, padj) {
   return("Not_Significant")
 }
 
-#Files to process
 expected_files <- c("DEGs_data_1.csv", "DEGs_data_2.csv")
 
 files_found <- expected_files[file.exists(expected_files)]
@@ -134,5 +129,6 @@ for (file_name in files_found) {
   write.csv(df, file = out_path, row.names = FALSE)
   cat("Saved processed file to:", out_path, "\n\n")
 }
+
 
 
