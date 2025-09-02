@@ -9,9 +9,7 @@ if (!dir.exists(results_dir)) {
   cat("Results folder already exists:", results_dir, "\n\n")
 }
 
-# detect actual column name 
 detect_col <- function(df, candidates) {
-  # returns the actual column name present in df (matching candidate case-insensitively)
   for (cand in candidates) {
     matches <- names(df)[tolower(names(df)) == tolower(cand)]
     if (length(matches) == 1) return(matches)
@@ -45,15 +43,12 @@ cat("Files to be processed:\n")
 print(files_found)
 cat("\n")
 
-#Column name candidates
 padj_candidates <- c("padj", "adj.P.Val", "adj_p", "FDR", "qvalue", "p.adjust")
 logfc_candidates <- c("logFC", "log2FoldChange", "log2.FC", "log2_fold_change", "log2FoldChange:logFC")
 
-#Process each file in a for-loop
 total_summary <- list(Upregulated = 0, Downregulated = 0, Not_Significant = 0)
 
 for (file_name in files_found) {
-  cat("--------------------------------------------------\n")
   cat("Processing file:", file_name, "\n")
   df <- tryCatch({
     read.csv(file_name, stringsAsFactors = FALSE, check.names = FALSE)
@@ -62,13 +57,11 @@ for (file_name in files_found) {
     next
   })
   
-  # Detect columns
   padj_col <- detect_col(df, padj_candidates)
   logfc_col <- detect_col(df, logfc_candidates)
   geneid_col <- detect_col(df, c("Gene_Id", "GeneID", "gene", "Gene", "Gene_Id"))
   
   if (is.null(geneid_col)) {
-    # If there is no gene id column, add row numbers as gene id (safe fallback)
     df$Gene_Id <- paste0("gene_", seq_len(nrow(df)))
     geneid_col <- "Gene_Id"
     cat("No Gene_Id column detected; created 'Gene_Id' with row identifiers.\n")
@@ -118,7 +111,6 @@ for (file_name in files_found) {
       "| Not_Significant:", nonsig_count,
       "| Total significant:", total_sig, "\n\n")
   
- 
   total_summary$Upregulated <- total_summary$Upregulated + up_count
   total_summary$Downregulated <- total_summary$Downregulated + down_count
   total_summary$Not_Significant <- total_summary$Not_Significant + nonsig_count
@@ -129,6 +121,3 @@ for (file_name in files_found) {
   write.csv(df, file = out_path, row.names = FALSE)
   cat("Saved processed file to:", out_path, "\n\n")
 }
-
-
-
