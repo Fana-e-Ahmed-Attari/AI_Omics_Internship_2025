@@ -2,10 +2,10 @@ raw_path <- "1_RawData/"
 output_path <- "3_Outputs/"
 
 if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
+  install.packages("BiocManager", ask = FALSE)
 
-BiocManager::install("DESeq2")
-install.packages(c("readr", "dplyr", "tibble", "ggplot2", "ggrepel"))
+BiocManager::install("DESeq2", ask = FALSE, update = FALSE)
+install.packages(c("readr", "dplyr", "tibble", "ggplot2", "ggrepel", "pheatmap"), ask = FALSE)
 
 library(readr)
 library(dplyr)
@@ -67,8 +67,42 @@ keep <- rowSums(counts(dds)) >= 10
 dds <- dds[keep, ]
 cat(paste(nrow(dds), "genes are filtered for analysis."))
 
+dds <- estimateSizeFactors(dds)
+norm_counts <- counts(dds, normalized = TRUE)
+write.csv(norm_counts, file = paste0(output_path, "normalized_counts.csv"), row.names = TRUE)
+
 # VARIANCE-STABILIZING TRANSFORMATION (VST)
 vsd <- vst(dds, blind = FALSE)
+vst_mat <- assay(vsd)
+write.csv(vst_mat, file = paste0(output_path, "vst_matrix.csv"), row.names = TRUE)
+
+# MEAN–VARIANCE PLOT
+mean_sd_df <- data.frame(
+  mean = rowMeans(vst_mat),
+  sd = apply(vst_mat, 1, sd)
+)
+
+mv_plot <- ggplot(mean_sd_df, aes(x = mean, y = sd)) +
+  geom_point(alpha = 0.4, size = 1) +
+  theme_classic() +
+  labs(
+    title = "Mean–Variance Relationship After VST",
+    x = "Mean Expression",
+    y = "Standard Deviation"
+  )
+
+ggsave(paste0(output_path, "mean_variance_plot.png"), plot = mv_plot, width = 7, height = 6)
+
+# 9) SAMPLE DISTANCE HEATMAP
+library(pheatmap)
+sample_dists <- dist(t(vst_mat))
+sample_dist_matrix <- as.matrix(sample_dists)
+
+pheatmap(sample_dist_matrix,
+         clustering_distance_rows = sample_dists,
+         clustering_distance_cols = sample_dists,
+         main = "Sample Distance Heatmap",
+         filename = paste0(output_path, "sample_distance_heatmap.png"))
 
 # PCA QC Plot 
 pca_data <- plotPCA(vsd, intgroup = "Condition", returnData = TRUE)
