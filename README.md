@@ -11,7 +11,9 @@
 ---
 
 ## 🌟 Introduction
-Welcome to my research repository for the **AI and Omics Research Internship (2025)**. This project highlights my work in bridging the gap between Biology and Computer Science. Using the R programming language and specialized bioinformatics tools, I developed several pipelines to process, analyze, and visualize complex genomic data.
+Welcome to my internship repository for the AI and Omics Research Internship (2025). This comprehensive portfolio showcases my journey in bridging the intersection between Biology and Computer Science, focusing on cutting-edge bioinformatics and computational biology techniques.
+
+Throughout this internship, I leveraged the R programming language and specialized bioinformatics tools to develop robust pipelines for processing, analyzing, and visualizing complex genomic datasets. My work demonstrates proficiency in handling real-world biological data challenges—from raw data acquisition to publication-ready visualizations.
 
 ---
 
@@ -76,7 +78,7 @@ I applied my skills to real-world medical data:
 ---
 
 ## 🤝 Acknowledgments
-I would like to express my sincere gratitude to the **AI and Omics Research Internship Program** for providing the mentorship, datasets, and guidance that made this research possible.
+I would like to express my sincere gratitude to the **AI and Omics Research Internship Program** for providing the mentorship, datasets, and guidance throughout the journey.
 
 ---
-<p align="center"><i>Final Research Documentation | Developed by Fana-e-Ahmed</i></p>
+<p align="center"><i>Journey through Data | Fana-e-Ahmed's AI & Omics Internship 2025 🔍</i></p>
